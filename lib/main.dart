@@ -80,6 +80,6 @@ class _MyAppState extends State<MyApp> {
                   builder: (childContext) => pageToShow, settings: settings);
             },
             // home: Practice()
-            home: OrderConfirmation()));
+            home: Splash()));
   }
 }

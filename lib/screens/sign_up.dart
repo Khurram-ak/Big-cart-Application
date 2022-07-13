@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/services.dart';
 
@@ -11,15 +12,36 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController passwordCtrl = TextEditingController();
+  TextEditingController phoneCtrl = TextEditingController();
+
+  void signUp(
+      TextEditingController emailCtrl,
+      TextEditingController passwordCtrl,
+      TextEditingController phoneCtrl) async {
+    try {
+      var uri =await Uri.parse("http://ishaqhassan.com:2000/user");
+      var response =await http.post(uri,body: {
+        'email': emailCtrl.text ,
+        'phone':phoneCtrl.text ,
+        'password': passwordCtrl.text
+      });
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0)));
+        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0)));
     return Scaffold(
-      body:Container(
+      body: Container(
         height: double.infinity,
         width: double.infinity,
-        child:Stack(
+        child: Stack(
           children: <Widget>[
             Container(
               height: 470,
@@ -33,10 +55,12 @@ class _SignUp extends State<SignUp> {
               bottom: 0,
               left: 0,
               child: Container(
-                 padding:EdgeInsets.only(top: 15,left:18,right:18),
+                padding: EdgeInsets.only(top: 15, left: 18, right: 18),
                 decoration: BoxDecoration(
                   color: Color(0xFFF4F5F9),
-                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                 ),
                 height: 480,
                 width: MediaQuery.of(context).size.width,
@@ -70,20 +94,21 @@ class _SignUp extends State<SignUp> {
                               color: Colors.white,
                             ),
                             padding:
-                            EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                                EdgeInsets.only(left: 20, top: 10, bottom: 10),
                             child: Row(
                               children: [
                                 Image.asset('lib/assests/images/mailIcon.png'),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Expanded(
+                                Expanded(
                                   child: TextField(
-                                    style: TextStyle(
+                                    controller: emailCtrl,
+                                    style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 15,
                                         fontFamily: 'PoppinsMed'),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: 'Email Address',
                                         hintStyle: TextStyle(
                                             color: Color(0xFF8F8F9E),
@@ -102,20 +127,22 @@ class _SignUp extends State<SignUp> {
                               color: Colors.white,
                             ),
                             padding:
-                            EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                                EdgeInsets.only(left: 20, top: 10, bottom: 10),
                             child: Row(
                               children: [
-                                Image.asset('lib/assests/images/telephone_icon.png'),
+                                Image.asset(
+                                    'lib/assests/images/telephone_icon.png'),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Expanded(
+                                Expanded(
                                   child: TextField(
-                                    style: TextStyle(
+                                    controller: phoneCtrl,
+                                    style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 15,
                                         fontFamily: 'PoppinsMed'),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: 'Phone number',
                                         hintStyle: TextStyle(
                                             color: Color(0xFF8F8F9E),
@@ -134,21 +161,22 @@ class _SignUp extends State<SignUp> {
                               color: Colors.white,
                             ),
                             padding:
-                            EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                                EdgeInsets.only(left: 20, top: 10, bottom: 10),
                             child: Row(
                               children: [
                                 Image.asset('lib/assests/images/passIcon.png'),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Expanded(
+                                Expanded(
                                   child: TextField(
+                                    controller: passwordCtrl,
                                     obscureText: true,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Color(0xFF868889),
                                         fontSize: 15,
                                         fontFamily: 'PoppinsMed'),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: 'Enter Password',
                                         hintStyle: TextStyle(
                                             color: Color(0xFF8F8F9E),
@@ -167,35 +195,61 @@ class _SignUp extends State<SignUp> {
                           Row(
                             children: [
                               Expanded(
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 20),
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    gradient:const LinearGradient(
-                                      begin: Alignment.bottomLeft,
-                                      end: Alignment.topRight,
-                                      colors: [
-                                        Color(0xFFAEDC81),
-                                        Color(0xFF6CC51D),
-                                      ],
+                                child: GestureDetector(
+                                  onTap: () {
+                                    signUp(emailCtrl, passwordCtrl, phoneCtrl);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.bottomLeft,
+                                        end: Alignment.topRight,
+                                        colors: [
+                                          Color(0xFFAEDC81),
+                                          Color(0xFF6CC51D),
+                                        ],
+                                      ),
                                     ),
+                                    child: Center(
+                                        child: Text(
+                                      "Signup",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                          fontFamily: 'PoppinsSemiBold'),
+                                    )),
                                   ),
-                                  child: Center(child: Text("Signup",style: TextStyle(fontSize:15,color: Colors.white,fontFamily: 'PoppinsSemiBold' ),)),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Already have an account ?",style: TextStyle(color:Color(0xFF868889),fontFamily: "PoppinsMed",fontSize: 15),),
+                              Text(
+                                "Already have an account ?",
+                                style: TextStyle(
+                                    color: Color(0xFF868889),
+                                    fontFamily: "PoppinsMed",
+                                    fontSize: 15),
+                              ),
                               GestureDetector(
-                                  onTap:(){Navigator.pushNamed(context, "/signin");},
-
-                                  child: Text("Login",style: TextStyle(color:Colors.black,fontFamily: "PoppinsMed",fontSize: 15),)),
-
+                                  onTap: () {
+                                    Navigator.pushNamed(context, "/signin");
+                                  },
+                                  child: Text(
+                                    "Login",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "PoppinsMed",
+                                        fontSize: 15),
+                                  )),
                             ],
                           )
                         ],
